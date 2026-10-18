@@ -43,7 +43,6 @@
             .wheel-container { width: 450px; height: 450px; }
         }
 
-        /* The rotating image */
         #wheelImage {
             width: 100%;
             height: 100%;
@@ -189,17 +188,14 @@
             <h2 class="text-2xl md:text-3xl font-black text-yellow-400 mb-8 glow-text uppercase tracking-wider">Amazing Prizes Await You!</h2>
             
             <div class="wheel-container" id="wheelWrapper">
-                <!-- Pointer -->
                 <div class="pointer-wrapper">
                     <div class="pointer-circle"></div>
                     <div class="pointer-triangle"></div>
                 </div>
                 
-                <!-- The Image Wheel -->
                 <!-- 🔥 YAHAN APNI IMAGE KA PATH DAALO -->
                 <img id="wheelImage" src="wheel-image.png" alt="Spin Wheel">
                 
-                <!-- Center Overlay -->
                 <div class="wheel-center-overlay">
                     <span>WIN</span>
                 </div>
@@ -253,7 +249,6 @@
 
     <script>
         const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbz-9qclh9TGZ3PD5-Vv8gKc24e3zhNbK9ahmH7Ye0PHZ1KN4FsxLhDWqiHMSJMOrp_A/exec";
-        
         let socialCompleted = { instagram: false, youtube: false, google: false };
         let isFormSubmitted = false;
         let currentUser = {};
@@ -299,18 +294,13 @@
             btn.disabled = true;
 
             try {
-                // CORS Proxy use kar rahe hain taaki network error na aaye
                 const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(GOOGLE_SHEET_URL)}`;
                 const response = await fetch(proxyUrl);
                 const data = await response.json();
-                
                 let isExist = false;
                 if(data && data.length > 0) {
                     for(let i = 0; i < data.length; i++) {
-                        if(data[i][2] == mobile) { 
-                            isExist = true; 
-                            break; 
-                        }
+                        if(data[i][2] == mobile) { isExist = true; break; }
                     }
                 }
 
@@ -350,15 +340,14 @@
             }
         }
 
-        // 🔥🔥 YAHAN ANGLES UPDATE KIYE HAIN 🔥🔥
-        // Image ke hisaab se exact angles calculate kiye gaye hain
+        // 🔥🔥 SAHI ANGLES (Calculation ke baad) 🔥🔥
         const prizes = [
-            { name: "₹49 TEMPERED GLASS", weight: 50, angle: -55 },  // Top Left
-            { name: "20% DISCOUNT ON ACCESSORIES", weight: 20, angle: 100 }, // Right
-            { name: "₹149 KDM NECKBAND", weight: 15, angle: 55 }, // Top Right
-            { name: "OPPO BUDS (₹3999 Cancel) ₹1499", weight: 10, angle: -160 }, // Left
-            { name: "BETTER LUCK NEXT TIME", weight: 5, angle: -220 }, // Bottom Left
-            // Activa (Bottom Right ~ 220) is NOT in the array, so 0% chance.
+            { name: "₹49 TEMPERED GLASS", weight: 50, angle: -30 },  
+            { name: "20% DISCOUNT ON ACCESSORIES", weight: 20, angle: 150 }, 
+            { name: "₹149 KDM NECKBAND", weight: 15, angle: 30 }, 
+            { name: "OPPO BUDS (₹3999 Cancel) ₹1499", weight: 10, angle: -150 }, 
+            { name: "BETTER LUCK NEXT TIME", weight: 5, angle: -210 }, 
+            // Activa is not in the list (0% chance)
         ];
 
         let currentRotation = 0;
@@ -369,18 +358,16 @@
             spinBtn.disabled = true;
             spinBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Spinning...';
 
-            // Create Weighted Pool
             let pool = [];
             prizes.forEach(p => {
                 for(let i=0; i < p.weight; i++) pool.push(p);
             });
 
-            // Pick random from pool based on weights
             const randomIndex = Math.floor(Math.random() * pool.length);
             const wonItem = pool[randomIndex];
             
-            // Calculate Rotation to stop at the exact angle
             const targetAngle = wonItem.angle; 
+            // Formula: Current + (5 chakkar) + (Target Angle) - (0.5 * 60 degrees adjustment)
             const totalRotation = (5 * 360) + targetAngle + (Math.random() * 10);
             
             currentRotation += totalRotation;
