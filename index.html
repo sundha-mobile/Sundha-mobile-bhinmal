@@ -253,7 +253,9 @@
     </div>
 
     <script>
+        // 🔥 YAHAN TUMHARA NAYA DEPLOYMENT URL HAI 🔥
         const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbz-9qclh9TGZ3PD5-Vv8gKc24e3zhNbK9ahmH7Ye0PHZ1KN4FsxLhDWqiHMSJMOrp_A/exec";
+        
         let socialCompleted = { instagram: false, youtube: false, google: false };
         let isFormSubmitted = false;
         let currentUser = {};
@@ -288,6 +290,7 @@
             }
         }
 
+        // 🔥 UPDATED FUNCTION: CORS PROXY KE SATH 🔥
         window.checkUser = async function() {
             const name = document.getElementById('nameInput').value.trim();
             const mobile = document.getElementById('mobileInput').value.trim();
@@ -299,12 +302,19 @@
             btn.disabled = true;
 
             try {
-                const response = await fetch(GOOGLE_SHEET_URL);
+                // CORS Proxy use kar rahe hain taaki network error na aaye
+                const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(GOOGLE_SHEET_URL)}`;
+                const response = await fetch(proxyUrl);
                 const data = await response.json();
+                
                 let isExist = false;
                 if(data && data.length > 0) {
                     for(let i = 0; i < data.length; i++) {
-                        if(data[i][2] == mobile) { isExist = true; break; }
+                        // Mobile number 3rd column (index 2) par check kar rahe hain
+                        if(data[i][2] == mobile) { 
+                            isExist = true; 
+                            break; 
+                        }
                     }
                 }
 
@@ -325,6 +335,7 @@
                 document.getElementById('spinMsg').classList.add('font-bold');
                 document.getElementById('wheelSection').scrollIntoView({behavior: 'smooth', block: 'center'});
             } catch (error) {
+                console.error("Error:", error);
                 alert("Network error. Please try again.");
                 btn.innerHTML = 'CONTINUE <i class="fa-solid fa-arrow-right ml-2"></i>';
                 btn.disabled = false;
@@ -344,17 +355,11 @@
         }
 
         // 🔥 IMPORTANT: PROBABILITY AND ANGLES FOR THE NEW IMAGE 🔥
-        // Angles calculated based on the image: Top center is 0 degrees.
         const prizes = [
-            // 50% Chance
             { name: "₹49 TEMPERED GLASS", weight: 50, angle: -50 }, 
-            // 20% Chance
             { name: "20% DISCOUNT ON ACCESSORIES", weight: 20, angle: 110 },
-            // 15% Chance
             { name: "₹149 KDM NECKBAND", weight: 15, angle: 50 },
-            // 10% Chance
             { name: "OPPO BUDS (₹3999 Cancel) ₹1499", weight: 10, angle: 170 },
-            // 5% Chance
             { name: "BETTER LUCK NEXT TIME", weight: 5, angle: -110 },
             // ACTIVA IS NOT HERE -> 0% Chance
         ];
@@ -378,9 +383,7 @@
             const wonItem = pool[randomIndex];
             
             // Calculate Rotation to stop at the exact angle
-            // We add 5 full rotations (5 * 360) so it spins a bit before stopping
             const targetAngle = wonItem.angle; 
-            // Using modulo math to ensure we land on the right spot without spinning 100 times
             const totalRotation = (5 * 360) + targetAngle + (Math.random() * 10);
             
             currentRotation += totalRotation;
@@ -409,6 +412,7 @@
                 formData.append('mobile', mobile);
                 formData.append('prize', prize);
                 formData.append('coupon', coupon);
+                // POST request mein no-cors mode zaroori hai
                 await fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData, mode: 'no-cors' });
             } catch (error) { console.error(error); }
         }
