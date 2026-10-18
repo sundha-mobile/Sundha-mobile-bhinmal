@@ -51,7 +51,6 @@
             object-fit: cover;
             transition: transform 6s cubic-bezier(0.17, 0.67, 0.12, 0.99);
             box-shadow: 0 0 50px rgba(250, 204, 21, 0.4);
-            /* Border is already in the image, but a slight CSS border helps */
             border: 4px solid #333; 
         }
 
@@ -78,7 +77,7 @@
             height: 0;
             border-left: 20px solid transparent;
             border-right: 20px solid transparent;
-            border-top: 40px solid #ef4444; /* Red pointer */
+            border-top: 40px solid #ef4444; 
         }
         .pointer-circle {
             width: 26px;
@@ -106,7 +105,7 @@
             justify-content: center;
             box-shadow: 0 0 20px rgba(0,0,0,0.8);
             border: 4px solid #facc15;
-            pointer-events: none; /* So it doesn't block clicks */
+            pointer-events: none;
         }
         @media (min-width: 768px) {
             .wheel-center-overlay { width: 110px; height: 110px; }
@@ -253,7 +252,6 @@
     </div>
 
     <script>
-        // 🔥 YAHAN TUMHARA NAYA DEPLOYMENT URL HAI 🔥
         const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbz-9qclh9TGZ3PD5-Vv8gKc24e3zhNbK9ahmH7Ye0PHZ1KN4FsxLhDWqiHMSJMOrp_A/exec";
         
         let socialCompleted = { instagram: false, youtube: false, google: false };
@@ -290,7 +288,6 @@
             }
         }
 
-        // 🔥 UPDATED FUNCTION: CORS PROXY KE SATH 🔥
         window.checkUser = async function() {
             const name = document.getElementById('nameInput').value.trim();
             const mobile = document.getElementById('mobileInput').value.trim();
@@ -310,7 +307,6 @@
                 let isExist = false;
                 if(data && data.length > 0) {
                     for(let i = 0; i < data.length; i++) {
-                        // Mobile number 3rd column (index 2) par check kar rahe hain
                         if(data[i][2] == mobile) { 
                             isExist = true; 
                             break; 
@@ -354,14 +350,15 @@
             }
         }
 
-        // 🔥 IMPORTANT: PROBABILITY AND ANGLES FOR THE NEW IMAGE 🔥
+        // 🔥🔥 YAHAN ANGLES UPDATE KIYE HAIN 🔥🔥
+        // Image ke hisaab se exact angles calculate kiye gaye hain
         const prizes = [
-            { name: "₹49 TEMPERED GLASS", weight: 50, angle: -50 }, 
-            { name: "20% DISCOUNT ON ACCESSORIES", weight: 20, angle: 110 },
-            { name: "₹149 KDM NECKBAND", weight: 15, angle: 50 },
-            { name: "OPPO BUDS (₹3999 Cancel) ₹1499", weight: 10, angle: 170 },
-            { name: "BETTER LUCK NEXT TIME", weight: 5, angle: -110 },
-            // ACTIVA IS NOT HERE -> 0% Chance
+            { name: "₹49 TEMPERED GLASS", weight: 50, angle: -55 },  // Top Left
+            { name: "20% DISCOUNT ON ACCESSORIES", weight: 20, angle: 100 }, // Right
+            { name: "₹149 KDM NECKBAND", weight: 15, angle: 55 }, // Top Right
+            { name: "OPPO BUDS (₹3999 Cancel) ₹1499", weight: 10, angle: -160 }, // Left
+            { name: "BETTER LUCK NEXT TIME", weight: 5, angle: -220 }, // Bottom Left
+            // Activa (Bottom Right ~ 220) is NOT in the array, so 0% chance.
         ];
 
         let currentRotation = 0;
@@ -412,7 +409,6 @@
                 formData.append('mobile', mobile);
                 formData.append('prize', prize);
                 formData.append('coupon', coupon);
-                // POST request mein no-cors mode zaroori hai
                 await fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData, mode: 'no-cors' });
             } catch (error) { console.error(error); }
         }
