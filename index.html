@@ -340,20 +340,15 @@
             }
         }
 
-        // 🔥🔥 SAHI ANGLES (Exact center points for the image) 🔥🔥
-        // CSS rotation right (clockwise) hota hai, isliye angle ko negative (-) kiya gaya hai.
+        // 🔥🔥 EXACT ANGLES CALCULATED FOR YOUR IMAGE 🔥🔥
+        // Hum wheel ko clockwise (right) ghumate hain, isliye angle negative hota hai.
         const prizes = [
-            // 50% Chance
-            { name: "₹49 TEMPERED GLASS", weight: 50, angle: -30 },  
-            // 20% Chance
-            { name: "20% DISCOUNT ON ACCESSORIES", weight: 20, angle: -150 }, 
-            // 15% Chance
-            { name: "₹149 KDM NECKBAND", weight: 15, angle: -90 }, 
-            // 10% Chance
-            { name: "OPPO BUDS (₹3999 Cancel) ₹1499", weight: 10, angle: -330 }, 
-            // 5% Chance
-            { name: "BETTER LUCK NEXT TIME", weight: 5, angle: -270 }, 
-            // Activa (Bottom Right) is not in the list, so 0% chance.
+            { name: "₹49 TEMPERED GLASS", weight: 50, angle: -360 },  // Top (Center is 0)
+            { name: "20% DISCOUNT ON ACCESSORIES", weight: 20, angle: -240 }, // Right-Bottom (Center is 120)
+            { name: "₹149 KDM NECKBAND", weight: 15, angle: -300 }, // Top-Right (Center is 60)
+            { name: "OPPO BUDS (₹3999 Cancel) ₹1499", weight: 10, angle: -60 }, // Left-Top (Center is 300)
+            { name: "BETTER LUCK NEXT TIME", weight: 5, angle: -120 }, // Bottom-Left (Center is 240)
+            // Activa is not here (0% chance)
         ];
 
         let currentRotation = 0;
@@ -374,12 +369,14 @@
             const randomIndex = Math.floor(Math.random() * pool.length);
             const wonItem = pool[randomIndex];
             
-            // Calculate Rotation to stop at the exact angle
+            // Calculate Rotation
             const targetAngle = wonItem.angle; 
             
-            // 5 full rotations (1800 deg) + target angle + small random offset (for natural look)
-            // The offset is kept very small (+/- 5 deg) so it doesn't cross the segment boundary.
-            const randomOffset = (Math.random() * 6) - 3; 
+            // Hum thoda sa random offset (max +/- 5 degree) daal rahe hain taaki natural lage, 
+            // lekin ye itna chota hai ki segment cross nahi karega.
+            const randomOffset = (Math.random() * 10) - 5; 
+            
+            // 5 full rotations (1800 deg) + target angle + offset
             const totalRotation = (5 * 360) + targetAngle + randomOffset;
             
             currentRotation += totalRotation;
