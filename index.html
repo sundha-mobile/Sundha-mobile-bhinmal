@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Sundha Mobile - Spin & Win</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .glow-text {
+            text-shadow: 0 0 15px rgba(250, 204, 21, 0.6), 0 0 30px rgba(250, 204, 21, 0.4);
+        }
+
+        /* --- IMAGE BASED WHEEL STYLES --- */
+        .wheel-container {
+            position: relative;
+            width: 340px;
+            height: 340px;
+            margin: 0 auto;
+        }
+        
+        @media (min-width: 768px) {
+            .wheel-container { width: 450px; height: 450px; }
+        }
+
+        /* The rotating image */
+        #wheelImage {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            transition: transform 6s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+            box-shadow: 0 0 50px rgba(250, 204, 21, 0.4);
+            /* Border is already in the image, but a slight CSS border helps */
+            border: 4px solid #333; 
+        }
+
+        .wheel-disabled {
+            opacity: 0.6;
+            filter: grayscale(90%);
+            pointer-events: none;
+        }
+
+        /* Top Pointer */
+        .pointer-wrapper {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
+            filter: drop-shadow(0 6px 8px rgba(0,0,0,0.6));
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .pointer-triangle {
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #ef4444; /* Red pointer */
+        }
+        .pointer-circle {
+            width: 26px;
+            height: 26px;
+            background: #ef4444;
+            border-radius: 50%;
+            margin-top: -12px;
+            border: 3px solid #fff;
+            box-shadow: inset 0 -2px 5px rgba(0,0,0,0.3);
+        }
+
+        /* Center "WIN" Logo overlaying the image */
+        .wheel-center-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90px;
+            height: 90px;
+            background: #fff;
+            border-radius: 50%;
+            z-index: 15;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+            border: 4px solid #facc15;
+            pointer-events: none; /* So it doesn't block clicks */
+        }
+        @media (min-width: 768px) {
+            .wheel-center-overlay { width: 110px; height: 110px; }
+        }
+        
+        .wheel-center-overlay span {
+            font-size: 32px;
+            font-weight: 900;
+            color: #1d4ed8;
+            text-shadow: 2px 2px 0px #facc15, -2px -2px 0px #facc15, 2px -2px 0px #facc15, -2px 2px 0px #facc15;
+            font-style: italic;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 4px; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="w-full text-center py-8 px-4 glass-card mb-6 rounded-b-3xl">
+        <h1 class="text-3xl md:text-5xl font-black tracking-wide glow-text text-yellow-400">SUNDHA MOBILE</h1>
+        <p class="text-sm md:text-base text-gray-300 mt-2 font-bold tracking-widest uppercase">Spin & Win Grand Prizes</p>
+    </header>
+
+    <main class="container mx-auto px-4 max-w-4xl pb-20">
+
+        <!-- Social Section -->
+        <section id="socialSection" class="mb-8 transition-opacity duration-300">
+            <h2 class="text-center text-xl font-bold mb-4 text-white">Complete 3 Steps to Unlock</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="https://www.instagram.com/sundha.mobile.bhinmal/?hl=en" target="_blank" id="card-instagram" class="glass-card p-6 rounded-2xl flex flex-col items-center cursor-pointer hover:scale-105 border-2 border-transparent" onclick="socialClick('instagram')">
+                    <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-500 flex items-center justify-center mb-3">
+                        <i class="fa-brands fa-instagram text-3xl text-white"></i>
+                    </div>
+                    <p class="font-bold text-base text-center">Follow on Instagram</p>
+                    <span class="tick hidden text-green-400 text-3xl mt-3"><i class="fa-solid fa-circle-check"></i></span>
+                </a>
+                <a href="https://www.youtube.com/@sundhamobile3671" target="_blank" id="card-youtube" class="glass-card p-6 rounded-2xl flex flex-col items-center cursor-pointer hover:scale-105 border-2 border-transparent" onclick="socialClick('youtube')">
+                    <div class="w-14 h-14 rounded-full bg-red-600 flex items-center justify-center mb-3">
+                        <i class="fa-brands fa-youtube text-3xl text-white"></i>
+                    </div>
+                    <p class="font-bold text-base text-center">Subscribe on YouTube</p>
+                    <span class="tick hidden text-green-400 text-3xl mt-3"><i class="fa-solid fa-circle-check"></i></span>
+                </a>
+                <a href="https://share.google/s2B7MYvfOMeDIDU7Z" target="_blank" id="card-google" class="glass-card p-6 rounded-2xl flex flex-col items-center cursor-pointer hover:scale-105 border-2 border-transparent" onclick="socialClick('google')">
+                    <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center mb-3">
+                        <i class="fa-brands fa-google text-3xl text-blue-600"></i>
+                    </div>
+                    <p class="font-bold text-base text-center">Google Review</p>
+                    <span class="tick hidden text-green-400 text-3xl mt-3"><i class="fa-solid fa-circle-check"></i></span>
+                </a>
+            </div>
+            <div id="socialLock" class="text-center text-red-400 font-bold mt-4 text-sm glass-card py-2 rounded-lg">
+                <i class="fa-solid fa-lock mr-1"></i> Complete all 3 steps first
+            </div>
+        </section>
+
+        <!-- Form Section -->
+        <section id="formSection" class="mb-8 opacity-50 pointer-events-none transition-all duration-500">
+            <div class="glass-card p-6 md:p-8 rounded-3xl max-w-md mx-auto border border-blue-500/30">
+                <h2 class="text-2xl font-bold text-center mb-6 text-yellow-400">Enter Your Details</h2>
+                <div class="space-y-4">
+                    <div class="relative">
+                        <i class="fa-solid fa-user absolute left-4 top-4 text-gray-400"></i>
+                        <input type="text" id="nameInput" placeholder="Your Full Name" class="w-full bg-slate-800/50 border border-slate-600 text-white rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-blue-500 transition-colors">
+                    </div>
+                    <div class="relative">
+                        <i class="fa-solid fa-phone absolute left-4 top-4 text-gray-400"></i>
+                        <input type="tel" id="mobileInput" placeholder="10-Digit Mobile Number" class="w-full bg-slate-800/50 border border-slate-600 text-white rounded-xl py-3 pl-12 pr-4 focus:outline-none focus:border-blue-500 transition-colors" maxlength="10">
+                    </div>
+                    <button id="continueBtn" onclick="checkUser()" class="w-full bg-gradient-to-r from-blue-600 to-blue-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-blue-500/30 hover:from-blue-500 hover:to-blue-400 transition-all">
+                        CONTINUE <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wheel Section -->
+        <section id="wheelSection" class="text-center mb-10 mt-16">
+            <h2 class="text-2xl md:text-3xl font-black text-yellow-400 mb-8 glow-text uppercase tracking-wider">Amazing Prizes Await You!</h2>
+            
+            <div class="wheel-container" id="wheelWrapper">
+                <!-- Pointer -->
+                <div class="pointer-wrapper">
+                    <div class="pointer-circle"></div>
+                    <div class="pointer-triangle"></div>
+                </div>
+                
+                <!-- The Image Wheel -->
+                <!-- 🔥 YAHAN APNI IMAGE KA PATH DAALO -->
+                <img id="wheelImage" src="wheel-image.png" alt="Spin Wheel">
+                
+                <!-- Center Overlay -->
+                <div class="wheel-center-overlay">
+                    <span>WIN</span>
+                </div>
+            </div>
+
+            <button id="spinBtn" onclick="spinWheel()" disabled class="mt-12 bg-gradient-to-b from-yellow-400 to-yellow-600 text-black font-black text-xl py-4 px-14 rounded-full shadow-[0_0_30px_rgba(250,204,21,0.5)] border-b-4 border-yellow-700 hover:scale-105 transition-transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:grayscale">
+                SPIN & WIN <i class="fa-solid fa-rotate ml-2"></i>
+            </button>
+            <p class="text-gray-400 text-sm mt-4 font-medium" id="spinMsg">Complete steps and enter details to unlock</p>
+        </section>
+
+        <!-- Coupon Section -->
+        <section id="couponSection" class="hidden mt-8">
+            <div class="glass-card border-2 border-dashed border-blue-500/50 p-6 md:p-8 rounded-3xl max-w-md mx-auto text-center relative">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-yellow-400 to-blue-500"></div>
+                <i class="fa-solid fa-gift text-4xl text-yellow-400 mb-4 animate-bounce"></i>
+                <h3 class="text-xl font-bold text-white mb-2">YOUR REWARD COUPON</h3>
+                <div class="bg-slate-800/80 p-6 rounded-2xl mt-4 border border-slate-600">
+                    <p class="text-sm text-gray-400 uppercase tracking-wider mb-1">You Won</p>
+                    <p class="text-2xl font-extrabold text-yellow-400 mb-4" id="couponPrize">---</p>
+                    <p class="text-sm text-gray-400 uppercase tracking-wider mb-1">Coupon Code</p>
+                    <p class="text-3xl font-mono font-bold text-white tracking-widest" id="couponCode">---</p>
+                    <p class="text-xs text-gray-500 mt-4" id="couponName">---</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center mt-12 text-gray-400 text-sm">
+            <a href="tel:+918693079498" class="inline-flex items-center justify-center bg-slate-800 px-6 py-2 rounded-full text-white hover:bg-slate-700 transition-colors">
+                <i class="fa-solid fa-phone mr-2 text-green-400"></i> +91 8693079498
+            </a>
+        </footer>
+    </main>
+
+    <!-- Success Modal -->
+    <div id="modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center hidden z-50 px-4">
+        <div class="glass-card bg-slate-900/90 border border-blue-500/30 p-8 rounded-3xl max-w-sm w-full text-center relative">
+            <div class="text-6xl mb-4 animate-bounce">🎉</div>
+            <h2 class="text-2xl font-extrabold text-white">CONGRATULATIONS!</h2>
+            <p class="text-yellow-400 text-xl font-bold mt-3" id="modalPrize">---</p>
+            <div class="mt-6 border-t border-slate-700 pt-4">
+                <p class="text-xs text-gray-400 tracking-widest uppercase">Your Coupon Number</p>
+                <p class="text-4xl font-mono font-bold text-white mt-2 tracking-widest" id="modalCode">---</p>
+                <p class="text-xs text-gray-400 mt-2" id="modalUser">---</p>
+            </div>
+            <button onclick="closeModal()" class="mt-6 w-full bg-white text-black font-bold py-3 rounded-xl hover:bg-gray-200 transition-colors">
+                DONE
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const GOOGLE_SHEET_URL = "https://script.google.com/macros/s/AKfycbzdYQDd2wDCtB80aYV_Xl9Ei1lCz6u-0uLeG5AyRH0mZiUTtkLkY2KlLBKyTg9P-cRS7Q/exec";
+        let socialCompleted = { instagram: false, youtube: false, google: false };
+        let isFormSubmitted = false;
+        let currentUser = {};
+
+        window.onload = function() {
+            const deviceId = localStorage.getItem('sundha_device_spun');
+            if (deviceId) {
+                document.getElementById('socialSection').classList.add('hidden');
+                document.getElementById('formSection').classList.add('hidden');
+                document.getElementById('wheelSection').classList.add('hidden');
+                document.getElementById('couponSection').classList.remove('hidden');
+                const prevData = JSON.parse(localStorage.getItem('sundha_prev_data'));
+                if (prevData) {
+                    document.getElementById('couponPrize').innerText = prevData.prize;
+                    document.getElementById('couponCode').innerText = prevData.coupon;
+                    document.getElementById('couponName').innerText = prevData.name + " • +91 " + prevData.mobile;
+                }
+            } else {
+                disableWheel(true);
+            }
+        }
+
+        window.socialClick = function(platform) {
+            const card = document.getElementById('card-' + platform);
+            card.classList.add('border-green-500', 'bg-green-500/10');
+            card.querySelector('.tick').classList.remove('hidden');
+            socialCompleted[platform] = true;
+            if(socialCompleted.instagram && socialCompleted.youtube && socialCompleted.google) {
+                document.getElementById('formSection').classList.remove('opacity-50', 'pointer-events-none');
+                document.getElementById('socialLock').innerHTML = '<i class="fa-solid fa-lock-open mr-1"></i> All steps completed! Enter details below.';
+                document.getElementById('socialLock').classList.replace('text-red-400', 'text-green-400');
+            }
+        }
+
+        window.checkUser = async function() {
+            const name = document.getElementById('nameInput').value.trim();
+            const mobile = document.getElementById('mobileInput').value.trim();
+            if(name === "") return alert("Please enter your full name");
+            if(mobile.length !== 10 || isNaN(mobile)) return alert("Please enter a valid 10-digit mobile number");
+
+            const btn = document.getElementById('continueBtn');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Checking...';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch(GOOGLE_SHEET_URL);
+                const data = await response.json();
+                let isExist = false;
+                if(data && data.length > 0) {
+                    for(let i = 0; i < data.length; i++) {
+                        if(data[i][2] == mobile) { isExist = true; break; }
+                    }
+                }
+
+                if(isExist) {
+                    alert("Your number is already exist! You cannot spin again.");
+                    btn.innerHTML = 'CONTINUE <i class="fa-solid fa-arrow-right ml-2"></i>';
+                    btn.disabled = false;
+                    return;
+                }
+
+                currentUser = { name: name, mobile: mobile };
+                isFormSubmitted = true;
+                document.getElementById('formSection').classList.add('hidden');
+                document.getElementById('socialSection').classList.add('hidden');
+                disableWheel(false);
+                document.getElementById('spinMsg').innerText = "You are ready to spin!";
+                document.getElementById('spinMsg').classList.replace('text-gray-400', 'text-green-400');
+                document.getElementById('spinMsg').classList.add('font-bold');
+                document.getElementById('wheelSection').scrollIntoView({behavior: 'smooth', block: 'center'});
+            } catch (error) {
+                alert("Network error. Please try again.");
+                btn.innerHTML = 'CONTINUE <i class="fa-solid fa-arrow-right ml-2"></i>';
+                btn.disabled = false;
+            }
+        }
+
+        function disableWheel(state) {
+            const wheelWrapper = document.getElementById('wheelWrapper');
+            const spinBtn = document.getElementById('spinBtn');
+            if(state) {
+                wheelWrapper.classList.add('wheel-disabled');
+                spinBtn.disabled = true;
+            } else {
+                wheelWrapper.classList.remove('wheel-disabled');
+                spinBtn.disabled = false;
+            }
+        }
+
+        // 🔥 IMPORTANT: PROBABILITY AND ANGLES FOR THE NEW IMAGE 🔥
+        // Angles calculated based on the image: Top center is 0 degrees.
+        const prizes = [
+            // 50% Chance
+            { name: "₹49 TEMPERED GLASS", weight: 50, angle: -50 }, 
+            // 20% Chance
+            { name: "20% DISCOUNT ON ACCESSORIES", weight: 20, angle: 110 },
+            // 15% Chance
+            { name: "₹149 KDM NECKBAND", weight: 15, angle: 50 },
+            // 10% Chance
+            { name: "OPPO BUDS (₹3999 Cancel) ₹1499", weight: 10, angle: 170 },
+            // 5% Chance
+            { name: "BETTER LUCK NEXT TIME", weight: 5, angle: -110 },
+            // ACTIVA IS NOT HERE -> 0% Chance
+        ];
+
+        let currentRotation = 0;
+
+        window.spinWheel = async function() {
+            if(!isFormSubmitted) return;
+            const spinBtn = document.getElementById('spinBtn');
+            spinBtn.disabled = true;
+            spinBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Spinning...';
+
+            // Create Weighted Pool
+            let pool = [];
+            prizes.forEach(p => {
+                for(let i=0; i < p.weight; i++) pool.push(p);
+            });
+
+            // Pick random from pool based on weights
+            const randomIndex = Math.floor(Math.random() * pool.length);
+            const wonItem = pool[randomIndex];
+            
+            // Calculate Rotation to stop at the exact angle
+            // We add 5 full rotations (5 * 360) so it spins a bit before stopping
+            const targetAngle = wonItem.angle; 
+            // Using modulo math to ensure we land on the right spot without spinning 100 times
+            const totalRotation = (5 * 360) + targetAngle + (Math.random() * 10);
+            
+            currentRotation += totalRotation;
+            const wheelImg = document.getElementById('wheelImage');
+            wheelImg.style.transform = `rotate(${currentRotation}deg)`;
+
+            setTimeout(async () => {
+                const couponCode = "SM-" + Math.floor(1000 + Math.random() * 9000);
+                localStorage.setItem('sundha_device_spun', 'true');
+                localStorage.setItem('sundha_prev_data', JSON.stringify({
+                    name: currentUser.name,
+                    mobile: currentUser.mobile,
+                    prize: wonItem.name,
+                    coupon: couponCode
+                }));
+                sendDataToSheet(currentUser.name, currentUser.mobile, wonItem.name, couponCode);
+                showCoupon(wonItem.name, couponCode, currentUser.name, currentUser.mobile);
+                spinBtn.innerHTML = 'DONE <i class="fa-solid fa-check ml-2"></i>';
+            }, 6000);
+        }
+
+        async function sendDataToSheet(name, mobile, prize, coupon) {
+            try {
+                const formData = new URLSearchParams();
+                formData.append('name', name);
+                formData.append('mobile', mobile);
+                formData.append('prize', prize);
+                formData.append('coupon', coupon);
+                await fetch(GOOGLE_SHEET_URL, { method: 'POST', body: formData, mode: 'no-cors' });
+            } catch (error) { console.error(error); }
+        }
+
+        function showCoupon(prize, code, name, mobile) {
+            document.getElementById('couponSection').classList.remove('hidden');
+            document.getElementById('couponPrize').innerText = prize;
+            document.getElementById('couponCode').innerText = code;
+            document.getElementById('couponName').innerText = name + " • +91 " + mobile;
+            document.getElementById('modal').classList.remove('hidden');
+            document.getElementById('modalPrize').innerText = prize;
+            document.getElementById('modalCode').innerText = code;
+            document.getElementById('modalUser').innerText = name + " • +91 " + mobile;
+        }
+
+        window.closeModal = function() {
+            document.getElementById('modal').classList.add('hidden');
+            document.getElementById('spinBtn').classList.add('hidden'); 
+            document.getElementById('couponSection').scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+    </script>
+</body>
+</html>
