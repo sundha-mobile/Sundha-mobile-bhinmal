@@ -188,12 +188,13 @@
             <h2 class="text-2xl md:text-3xl font-black text-yellow-400 mb-8 glow-text uppercase tracking-wider">Amazing Prizes Await You!</h2>
             
             <div class="wheel-container" id="wheelWrapper">
+                <!-- HTML Pointer (Agar nayi image mein pehle se pointer hai, to isko hata sakte ho) -->
                 <div class="pointer-wrapper">
                     <div class="pointer-circle"></div>
                     <div class="pointer-triangle"></div>
                 </div>
                 
-                <!-- 🔥 YAHAN APNI IMAGE KA PATH DAALO -->
+                <!-- 🔥 YAHAN APNI NAYI (2nd) IMAGE KA PATH DAALO -->
                 <img id="wheelImage" src="wheel-image.png" alt="Spin Wheel">
                 
                 <div class="wheel-center-overlay">
@@ -340,15 +341,15 @@
             }
         }
 
-        // 🔥🔥 100% CORRECT ANGLES 🔥🔥
-        // CSS rotate positive = clockwise. To bring angle X to 0, we must rotate by -X.
+        // 🔥🔥 2ND IMAGE KE LIYE 100% CORRECT ANGLES 🔥🔥
+        // Tempered glass top par hai (0 deg), KDM 60 deg, etc.
         const prizes = [
-            { name: "₹49 TEMPERED GLASS", weight: 50, angle: -0 },     // 0 degrees
-            { name: "20% DISCOUNT ON ACCESSORIES", weight: 20, angle: -120 }, // 120 degrees
-            { name: "₹149 KDM NECKBAND", weight: 15, angle: -60 },     // 60 degrees
-            { name: "OPPO BUDS (₹3999 Cancel) ₹1499", weight: 10, angle: -300 }, // 300 degrees
-            { name: "BETTER LUCK NEXT TIME", weight: 5, angle: -240 },   // 240 degrees
-            // Activa (180 degrees) is not here (0% chance)
+            { name: "₹49 TEMPERED GLASS", weight: 50, angle: -0 },       // Top Center
+            { name: "20% DISCOUNT ON ACCESSORIES", weight: 20, angle: -120 },// Right-Bottom
+            { name: "₹149 KDM NECKBAND", weight: 15, angle: -60 },       // Top-Right
+            { name: "OPPO BUDS (₹3999 Cancel) ₹1499", weight: 10, angle: -300 }, // Left-Top
+            { name: "BETTER LUCK NEXT TIME", weight: 5, angle: -240 },   // Left-Bottom
+            // Activa (180 deg) is not in the list, so 0% chance
         ];
 
         let currentRotation = 0;
@@ -372,7 +373,7 @@
             // Calculate Rotation
             const targetAngle = wonItem.angle; 
             
-            // Random offset (max +/- 5 degree) daal rahe hain taaki natural lage
+            // Thoda sa random offset daal rahe hain taaki natural lage (max +/- 5 degree)
             const randomOffset = (Math.random() * 10) - 5; 
             
             // 5 full rotations (1800 deg) + target angle + offset
