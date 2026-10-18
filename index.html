@@ -340,14 +340,20 @@
             }
         }
 
-        // 🔥🔥 SAHI ANGLES (Calculation ke baad) 🔥🔥
+        // 🔥🔥 SAHI ANGLES (Exact center points for the image) 🔥🔥
+        // CSS rotation right (clockwise) hota hai, isliye angle ko negative (-) kiya gaya hai.
         const prizes = [
+            // 50% Chance
             { name: "₹49 TEMPERED GLASS", weight: 50, angle: -30 },  
-            { name: "20% DISCOUNT ON ACCESSORIES", weight: 20, angle: 150 }, 
-            { name: "₹149 KDM NECKBAND", weight: 15, angle: 30 }, 
-            { name: "OPPO BUDS (₹3999 Cancel) ₹1499", weight: 10, angle: -150 }, 
-            { name: "BETTER LUCK NEXT TIME", weight: 5, angle: -210 }, 
-            // Activa is not in the list (0% chance)
+            // 20% Chance
+            { name: "20% DISCOUNT ON ACCESSORIES", weight: 20, angle: -150 }, 
+            // 15% Chance
+            { name: "₹149 KDM NECKBAND", weight: 15, angle: -90 }, 
+            // 10% Chance
+            { name: "OPPO BUDS (₹3999 Cancel) ₹1499", weight: 10, angle: -330 }, 
+            // 5% Chance
+            { name: "BETTER LUCK NEXT TIME", weight: 5, angle: -270 }, 
+            // Activa (Bottom Right) is not in the list, so 0% chance.
         ];
 
         let currentRotation = 0;
@@ -358,17 +364,23 @@
             spinBtn.disabled = true;
             spinBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Spinning...';
 
+            // Create Weighted Pool
             let pool = [];
             prizes.forEach(p => {
                 for(let i=0; i < p.weight; i++) pool.push(p);
             });
 
+            // Pick random from pool based on weights
             const randomIndex = Math.floor(Math.random() * pool.length);
             const wonItem = pool[randomIndex];
             
+            // Calculate Rotation to stop at the exact angle
             const targetAngle = wonItem.angle; 
-            // Formula: Current + (5 chakkar) + (Target Angle) - (0.5 * 60 degrees adjustment)
-            const totalRotation = (5 * 360) + targetAngle + (Math.random() * 10);
+            
+            // 5 full rotations (1800 deg) + target angle + small random offset (for natural look)
+            // The offset is kept very small (+/- 5 deg) so it doesn't cross the segment boundary.
+            const randomOffset = (Math.random() * 6) - 3; 
+            const totalRotation = (5 * 360) + targetAngle + randomOffset;
             
             currentRotation += totalRotation;
             const wheelImg = document.getElementById('wheelImage');
